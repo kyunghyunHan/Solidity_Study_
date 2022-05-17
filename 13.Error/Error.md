@@ -33,7 +33,7 @@ contract lec25{
  
 }
 ```
-
+- modifier 함꼐 사용가능
 ## if+ revert
 ```solidity
 // SPDX-License-Identifier: GPL-3.0
