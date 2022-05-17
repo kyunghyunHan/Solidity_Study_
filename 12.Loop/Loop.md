@@ -1,4 +1,5 @@
 # 반복문
+## for문
 ```solidity
 function getEvens() pure external returns(uint[]) {
   uint[] memory evens = new uint[](5);
@@ -15,5 +16,67 @@ function getEvens() pure external returns(uint[]) {
     }
   }
   return evens;
+}
+```
+## while문
+```
+  초기값
+
+    while (값이 얼마나 forloop을 돌아야하는지) {
+    whileloop 내용
+    whileloop 한번 돌때마다 값의 변화;
+
+    }
+```
+```solidity
+ function whileLoopEvents() public {
+        uint256 i = 0;
+        while(i<countryList.length){
+             emit CountryIndexName(i,countryList[i]);
+             i++;
+        }
+    }
+```
+## Do-while 
+```
+  초기값
+    do{
+          dowhileloop 내용
+    }
+    while (값이 얼마나 forloop을 돌아야하는지)
+```
+```solidity
+  function doWhileLoopEvents() public {
+        uint256 i = 0;
+        do{
+            emit CountryIndexName(i,countryList[i]);
+            i++;
+        }
+        while(i<countryList.length);
+    }
+
+```
+## linear search
+```solidity
+// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity >=0.7.0 <0.9.0;
+
+
+contract lec24{
+    string[] private countryList = ["South Korea","North Korea","USA","China","Japan"];
+    
+    function linearSearch(string memory _search) public view returns(int256,string memory){
+        
+        for(uint256 i=0; i<countryList.length; i++){
+            if(keccak256(bytes(countryList[i])) == keccak256(bytes(_search))){
+                return (i,countryList[i]);
+            }
+        }
+        
+        return(99,"Nothing");
+        
+    }
+
 }
 ```
