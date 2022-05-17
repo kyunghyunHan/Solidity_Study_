@@ -1,4 +1,37 @@
 # Modifier
+```solidity
+// 파라미터 값이 없는 경우   
+   modifier 모디파이어명{
+         revert 나 require
+         _;
+    }
+ 
+ // 파라미터 값이 없는 경우
+    modifier 모디파이어명(파라미터){
+          revert 나 require
+         _;
+    }
+```
+## 파라미터가 있는 modifier 경우
+```solidity
+// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity >=0.7.0 <0.9.0;
+
+contract lec27{
+
+    modifier onlyAdults2(uint256 _age){
+         require(_age>18,"You are not allowed to pay for the cigarette");
+         _;
+    }
+
+    function BuyCigarette2(uint256 _age) public onlyAdults2(_age) returns(string memory){
+        return "Your payment is scceeded";
+    }
+  
+}
+```
+
 ## 소유가능한 컨트렉트
 ```solidity
 /**

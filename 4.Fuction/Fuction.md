@@ -262,3 +262,11 @@ contract SandwichFactory {
   }
 }
 ```
+
+## 반환
+```solidity
+    function add2(uint256 _num1, uint256 _num2) public pure returns (uint256 total){
+         total = _num1 + _num2;
+         return total;
+    }
+```
