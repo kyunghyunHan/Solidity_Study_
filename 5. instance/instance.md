@@ -1,3 +1,31 @@
 # instance 
 - 인스턴스는 주로 하나의 컨트랙에서 다른 컨트랙을 접근할 때 쓰인답니다.
 
+```solidity
+// SPDX-License-Identifier:GPL-30
+pragma solidity >= 0.7.0 < 0.9.0;
+
+contract A{
+    
+    uint256 public a = 5;
+    
+    function change(uint256 _value) public {
+        a = _value;
+    } 
+
+}
+
+contract B{
+    
+    A instance = new A();
+    
+    function get_A() public view returns(uint256) {
+        return instance.a();
+    }
+    function change_A(uint256 _value) public  {
+        instance.change(_value);
+    }    
+
+}
+```
+- change_A에서는 instance.change(_value) 로 해줌으로써, 컨트랙 A의 함수 change를 접근할걸 알 수가 있습니다.

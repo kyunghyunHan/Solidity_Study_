@@ -12,5 +12,14 @@ contract A{
 }
 
 contract B{
+    
+    A instance = new A();
+    
+    function get_A() public view returns(uint256) {
+        return instance.a();
+    }
+    function change_A(uint256 _value) public  {
+        instance.change(_value);
+    }    
 
 }
