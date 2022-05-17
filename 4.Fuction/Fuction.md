@@ -47,9 +47,30 @@ contract Lec5 {
 
 ## external : 오직 밖에서만 접근 가능. 
 - external이기에, external이 정의된 스마트 컨트랙 내에서는 사용이 불가능 
+- 함수가 컨트렉트 바깥에서만 호출될수 있고 컨트렉트 내의 다른 함수에 의해 호출될수 없다는 점을 제외하면 public과 동일
 
 ## internal : 오직 internal이 정의된 스마트 컨트랙 내에서, 상속받은 자식 스마트 컨트랙에서 접근 가능.
+```solidity
+contract Sandwich {
+  uint private sandwichesEaten = 0;
+
+  function eat() internal {
+    sandwichesEaten++;
+  }
+}
+
+contract BLT is Sandwich {
+  uint private baconSandwichesEaten = 0;
+
+  function eatWithBacon() public returns (string) {
+    baconSandwichesEaten++;
+    // eat 함수가 internal로 선언되었기 때문에 여기서 호출이 가능하다 
+    eat();
+  }
+}
+```
 - internal 은 private 과 비슷해요, private에서 한가지 기능(상속받은 자식 접근 가능)이 더 추가 되었다고 생각하시면 됩니다.
+- 함수가 정의된 컨트렉트를 상속하는 컨트렉트 에서도 접근이 가능하는 점을제외하면 private와동일
 
 ## 정리
 - public: 모든곳에서 접근 가능
@@ -78,5 +99,53 @@ string greeting = "What's up dog";
 
 function sayHello() public returns (string) {
   return greeting;
+}
+```
+
+## 인터페이스
+- 블록체인상에 있으면서 우리가 소유하지 않은 컨트렉트와 우리컨트렉트가 상호작용 하려면 인터페이스 정의
+- 컨트렉트 정의와 유사
+- 다른 컨트렉트와 상호작용 하는 함수만을 선언할뿐
+- 함수 몸체를 정의하지 않는다
+```solidity
+아래와 같이 인터페이스가 정의되면
+contract NumberInterface {
+  function getNum(address _myAddress) public view returns (uint);
+}
+
+다음과 같이 컨트랙트에서 인터페이스를 이용할 수 있지:
+contract MyContract {
+  address NumberInterfaceAddress = 0xab38...
+  // ^ 이더리움상의 FavoriteNumber 컨트랙트 주소이다
+  NumberInterface numberContract = NumberInterface(NumberInterfaceAddress)
+  // 이제 `numberContract`는 다른 컨트랙트를 가리키고 있다.
+
+  function someFunction() public {
+    // 이제 `numberContract`가 가리키고 있는 컨트랙트에서 `getNum` 함수를 호출할 수 있다:
+    uint num = numberContract.getNum(msg.sender);
+    // ...그리고 여기서 `num`으로 무언가를 할 수 있다
+  }
+}
+```
+
+## 다수의 반환값 처리
+```solidity
+function multipleReturns() internal returns(uint a, uint b, uint c) {
+  return (1, 2, 3);
+}
+
+function processMultipleReturns() external {
+  uint a;
+  uint b;
+  uint c;
+  // 다음과 같이 다수 값을 할당한다:
+  (a, b, c) = multipleReturns();
+}
+
+// 혹은 단 하나의 값에만 관심이 있을 경우: 
+function getLastReturnValue() external {
+  uint c;
+  // 다른 필드는 빈칸으로 놓기만 하면 된다: 
+  (,,c) = multipleReturns();
 }
 ```

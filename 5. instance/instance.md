@@ -29,3 +29,4 @@ contract B{
 }
 ```
 - change_A에서는 instance.change(_value) 로 해줌으로써, 컨트랙 A의 함수 change를 접근할걸 알 수가 있습니다.
+
