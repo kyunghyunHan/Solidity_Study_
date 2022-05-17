@@ -14,6 +14,7 @@ eatHamburgers("vitalik", 100);
     }
 ```
 ## 2. Parameter는 있고, Retrun 값이 없는 function 정의
+- uint256으로 인자를 받음
 ```
     function 이름 (받고싶은 타입  변수명 ) public { 
       // 내용
@@ -34,6 +35,21 @@ ex)
     }
 
 ```
+```solidity
+// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity >=0.7.0 <0.9.0;
+
+contract Lec4 {
+    uint256 public a = 3;
+    function changeA(uint256 _value) public returns(uint256){
+        a =_value;
+        return a;
+    }
+}
+```
+- _value의 인자값을 받고
+- a 값 리턴 (uint256)
 
 ## public :어디서든 접근 가능
 - 기본적인 함수를 private로 선언하고 공개할 함수만 public으로 선언
@@ -49,6 +65,25 @@ contract Lec5 {
 - external이기에, external이 정의된 스마트 컨트랙 내에서는 사용이 불가능 
 - 함수가 컨트렉트 바깥에서만 호출될수 있고 컨트렉트 내의 다른 함수에 의해 호출될수 없다는 점을 제외하면 public과 동일
 
+```solidity
+contract external_example {
+    uint256 private a = 3;
+    
+    function get_a() view external returns (uint256)  {
+        return a;
+    }
+
+}
+
+contract external_example_2 {
+    
+    external_example instance = new external_example();
+
+    function external_example_get_a() view public returns (uint256)  {
+        return instance.get_a();
+    }
+}
+```
 ## internal : 오직 internal이 정의된 스마트 컨트랙 내에서, 상속받은 자식 스마트 컨트랙에서 접근 가능.
 ```solidity
 contract Sandwich {
@@ -84,6 +119,19 @@ contract BLT is Sandwich {
 ```solidity
 function sayHello() public view returns (string) {
   ```
+```solidity
+pragma solidity >=0.7.0 <0.9.0;
+
+contract View_example{
+     uint256 public a = 1;
+    
+    function read_a() public view returns(uint256){
+        return a+2;
+    } 
+}
+```
+- 만약 read_a에서 stroage state값을 바꾼다면 아무것도 안써주면 댄다
+
 ## pure 
 
 - storage state 를 읽으면 안되고, 그 state값을 변경할 수 도 없다.
@@ -92,6 +140,10 @@ function _multiply(uint a, uint b) private pure returns (uint) {
   return a * b;
 }
 ```
+## 정리 
+- view : function 밖의 변수들을 읽을수 있으나 변경 불가능
+- pure : function 밖의 변수들을 읽지 못하고, 변경도 불가능
+- viwe 와 pure 둘다 명시 안할때: function 밖의 변수들을 읽어서, 변경을 해야함.
 ## 반환값
 - 반환값:함수에서 어떤 값을 반환 받으려면 다음과 같이 선언
 ```solidity
@@ -168,5 +220,45 @@ function getArray() external pure returns(uint[]) {
   values.push(3);
   // 해당 배열을 반환한다.
   return values;
+}
+```
+
+## Storage vs Memory
+- Stotage는 블록체인상에 영구적으로 저장되는 변수
+- Memory는 임시적으로 저장되는 변수, 컨트랙트 함수에 대한 외부 호출들이 일어나는 사이에 삭제
+- 상태변수는(함수 외부에 선언된 변수) 는 초기설정상 storage로 선언, 블록체인에 영구적으로 저장되며, 함수 내부의 memory로 자동 선언 되어서 함수 호출이 되면 사라짐
+- Colldata:주로 external function의 파라메타로 사용
+- stack:EVM(Ethereum Virtual Machine)에서 stack data를 관리할떄 쓰는 영역(1024mb제한)
+```solidity
+contract SandwichFactory {
+  struct Sandwich {
+    string name;
+    string status;
+  }
+
+  Sandwich[] sandwiches;
+
+  function eatSandwich(uint _index) public {
+    // Sandwich mySandwich = sandwiches[_index];
+
+    // ^ 꽤 간단해 보이나, 솔리디티는 여기서 
+    // `storage`나 `memory`를 명시적으로 선언해야 한다는 경고 메시지를 발생한다. 
+    // 그러므로 `storage` 키워드를 활용하여 다음과 같이 선언해야 한다:
+    Sandwich storage mySandwich = sandwiches[_index];
+    // ...이 경우, `mySandwich`는 저장된 `sandwiches[_index]`를 가리키는 포인터이다.
+    // 그리고 
+    mySandwich.status = "Eaten!";
+    // ...이 코드는 블록체인 상에서 `sandwiches[_index]`을 영구적으로 변경한다. 
+
+    // 단순히 복사를 하고자 한다면 `memory`를 이용하면 된다: 
+    Sandwich memory anotherSandwich = sandwiches[_index + 1];
+    // ...이 경우, `anotherSandwich`는 단순히 메모리에 데이터를 복사하는 것이 된다. 
+    // 그리고 
+    anotherSandwich.status = "Eaten!";
+    // ...이 코드는 임시 변수인 `anotherSandwich`를 변경하는 것으로 
+    // `sandwiches[_index + 1]`에는 아무런 영향을 끼치지 않는다. 그러나 다음과 같이 코드를 작성할 수 있다: 
+    sandwiches[_index + 1] = anotherSandwich;
+    // ...이는 임시 변경한 내용을 블록체인 저장소에 저장하고자 하는 경우이다.
+  }
 }
 ```
