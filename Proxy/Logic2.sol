@@ -1,6 +1,6 @@
 pragma solidity ^0.8.4;
 
-contract Logic {
+contract LogicV2 {
     bool initialized;
     uint256 magicNumber;
 
@@ -17,5 +17,9 @@ contract Logic {
 
     function getMagicNumber() public view returns (uint256) {
         return magicNumber;
+    }
+
+    function doMagic() public {
+        magicNumber = magicNumber / 2;
     }
 }
