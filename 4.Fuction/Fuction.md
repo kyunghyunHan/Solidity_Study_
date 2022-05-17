@@ -1,4 +1,12 @@
 # Fuctionn
+- 함수 인자명을 언더스코어 시작해서 전역변수와 구별하는것이 관례
+```solidity
+function eatHamburgers(string _name, uint _amount) {
+
+}
+//다음과 같이 호출
+eatHamburgers("vitalik", 100);
+```
 ## 1. Parameter 와 Retrun 값이 없는 function 정의
 ```
  function 이름 () public { // (public, private, internal, external) 변경가능.  
@@ -28,6 +36,7 @@ ex)
 ```
 
 ## public :어디서든 접근 가능
+- 기본적인 함수를 private로 선언하고 공개할 함수만 public으로 선언
 ```solidity
 contract Lec5 {
     uint256 public a = 3;
@@ -51,6 +60,23 @@ contract Lec5 {
 
 ## view
 - storage state 를 읽을 수 있지만, 그 state 값을 변경할 수 없다.
-
+```solidity
+function sayHello() public view returns (string) {
+  ```
 ## pure 
+
 - storage state 를 읽으면 안되고, 그 state값을 변경할 수 도 없다.
+```solidity
+function _multiply(uint a, uint b) private pure returns (uint) {
+  return a * b;
+}
+```
+## 반환값
+- 반환값:함수에서 어떤 값을 반환 받으려면 다음과 같이 선언
+```solidity
+string greeting = "What's up dog";
+
+function sayHello() public returns (string) {
+  return greeting;
+}
+```
