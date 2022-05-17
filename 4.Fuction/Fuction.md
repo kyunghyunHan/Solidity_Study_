@@ -149,3 +149,24 @@ function getLastReturnValue() external {
   (,,c) = multipleReturns();
 }
 ```
+## View함수를 이용헤 절역
+- view 함수는 사용자의 의해 외부에서 호출되었을 때 가스를 전혀 소모하지 않는다
+- view 함수가 블록체인 상에서 어떤 것도 수정하지 않기 때문 데이터읽기
+- 가능한 external view함수를 쓰는것 (가스 사용 최적화)
+## Storage는 비싸다
+- solidity에서 비싼 연산중 하나인 storage를 쓰는것 그중에서도 쓰기연산
+- 데이터의 일부를 쓰거나 바꿀때마다 블록체인에 영구적으로 기록되기 때문
+- 비용을 최소화하기 위해 진짜 필요한 경우 아니면 storage에 데이터를 쓰지 않는 것이 좋음
+- Storage보다는 memory사용해서 함수끝날때까지만 사용 (가스절약)
+```solidity
+function getArray() external pure returns(uint[]) {
+  // 메모리에 길이 3의 새로운 배열을 생성한다.
+  uint[] memory values = new uint[](3);
+  // 여기에 특정한 값들을 넣는다.
+  values.push(1);
+  values.push(2);
+  values.push(3);
+  // 해당 배열을 반환한다.
+  return values;
+}
+```

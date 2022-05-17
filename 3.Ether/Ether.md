@@ -17,3 +17,28 @@
 
  
 ```
+
+## Gas
+- Dapp함수를 실행할떄 마다 가스 사용
+- 얼마나 많은 가스를 필요하는지는 그함수의 로직이 얼마나 복잡한지에 따라 달라짐
+- 함수를 실행하는 것은 사용자들에게 실제 돈을 쓰게 하기 때문에 이더리움에서 코드 최적화는 가장 중요
+- 무한 반복문을 써서 네트워크를 방해하거나 자원소모가 큰 연산을 써서 네트워크 자원을 모두 사용하지 못하도록
+- uint대신 uint8을 사용하는것은 가스소모를 줄이는데 아무영향없다 (uint크기에 상관없이 256비트의 저장공간을 미리 잡아 놓기 때문에)
+- struct안에서는 예외 (더 작은 크기의 uint사용)
+```solidity
+struct NormalStruct {
+  uint a;
+  uint b;
+  uint c;
+}
+
+struct MiniMe {
+  uint32 a;
+  uint32 b;
+  uint c;
+}
+
+// `mini`는 구조체 압축을 했기 때문에 `normal`보다 가스를 조금 사용할 것이네.
+NormalStruct normal = NormalStruct(10, 20, 30);
+MiniMe mini = MiniMe(10, 20, 30); 
+```
