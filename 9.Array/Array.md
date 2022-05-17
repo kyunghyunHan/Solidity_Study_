@@ -9,3 +9,81 @@ string[5] stringArray;
 //golang 의 슬라이스같은
 uint[] dynamicArray;
 ```
+- index0수정
+```solidity
+// SPDX-License-Identifier:GPL-30
+pragma solidity >= 0.7.0 < 0.9.0;
+ 
+contract lec18{
+    
+    uint256[] public ageArray;
+
+    function Agepush(uint256 _age)public{
+        ageArray.push(_age);
+    }
+    function AgeChange(uint256 _index, uint256 _age)public{
+        ageArray[_index] = _age;
+    }
+
+}
+```
+## 배열의 값 지우기
+- Pop :가장 최신의 값을 지운다/ length 도 줄어든다 
+- delete: 원하는 인덱스의 값을 지운다, 그러나 length 는 줄어들지 않는다
+```solidity
+// SPDX-License-Identifier:GPL-30
+pragma solidity >= 0.7.0 < 0.9.0;
+ 
+contract lec18{
+    
+    
+    uint256[] public ageArray;
+
+    function AgePop()public {
+        ageArray.pop();
+    }
+    
+    function AgePop(uint256 _index)public {
+        delete ageArray[_index];
+    }
+
+    
+    
+}
+```
+- 참고 
+```solidity
+// SPDX-License-Identifier:GPL-30
+pragma solidity >= 0.7.0 < 0.9.0;
+ 
+contract lec18{
+    
+    
+    uint256[] public ageArray;
+    uint256[10] public ageFixedSizeArray;
+    string[] public nameArray= ["Kal","Jhon","Kerri"];
+  
+    function AgeLength()public view returns(uint256) {
+        return ageArray.length;
+    }
+    
+    function AgePush(uint256 _age)public{
+        ageArray.push(_age);
+    }
+    function AgeChange(uint256 _index, uint256 _age)public{
+        ageArray[_index] = _age;
+    }
+    function AgeGet(uint256 _index)public view returns(uint256){
+        return ageArray[_index];
+    }
+    function AgePop()public {
+        ageArray.pop();
+    }
+    
+    function AgePop(uint256 _index)public {
+        delete ageArray[_index];
+    }
+
+
+}
+```
